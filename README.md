@@ -1,6 +1,6 @@
 ## "Zip Pong"
 
-Nothing to see here, just playing around with d3.. Poorly :D
+Nothing to see here, just playing around with d3.. Poorly.. :D
 
 How to run locally:
 ```
