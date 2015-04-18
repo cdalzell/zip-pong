@@ -21,9 +21,7 @@ lineReader.eachLine(inputFile, function (line) {
     }
 }).then(function () {
     var jsonStr = JSON.stringify(zipObj);
-    
-    //jsonStr = jsonminify
-    
+
     console.log('Writing file to: ' + outputFile);
     
     fs.writeFile(outputFile, jsonStr, function (err) {
