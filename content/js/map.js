@@ -7,15 +7,26 @@ var proj = d3.geo.albersUsa()
 
 var path = d3.geo.path().projection(proj);
 
-// load the data files, then call render()
+var zipObj;
+
+$.ajax({
+    url: "js/zipcodes.json",
+    dataType: "json",
+    success: function(response) {
+        zipObj = response;
+    }
+});
+
+// load the data files, then call initialize()
 queue()
-    .defer(d3.json, "js/us-states.geojson")
-// load zip lat/lon here
-    .await(render);
+    .defer(d3.json, 'js/us-states.geojson')
+    .await(initialize);
 
+function initialize(err, states, zips) {
+    render(states);
+}
 
-// function render(error, states, zips) {
-function render(error, states) {
+function render(states) {
     var svg = d3.select("#map").append("svg")
         .attr("width", width)
         .attr("height", height);
