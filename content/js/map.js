@@ -9,20 +9,25 @@ var path = d3.geo.path().projection(proj);
 
 var zipObj;
 
-$.ajax({
-    url: "js/zipcodes.json",
-    dataType: "json",
-    success: function(response) {
-        zipObj = response;
-    }
-});
-
-// load the data files, then call initialize()
+// load the data files, then call ready()
 queue()
     .defer(d3.json, 'js/us-states.geojson')
-    .await(initialize);
+    .defer(loadZips, 'js/zipcodes.json')
+    .await(ready);
 
-function initialize(err, states, zips) {
+function loadZips(path, callback) {
+    $.ajax({
+        url: path,
+        dataType: "json",
+        success: function(response) {
+            callback(null, response);
+        }
+    });
+}
+
+function ready(err, states, zips) {
+    zipObj = zips;
+    
     render(states);
 }
 
