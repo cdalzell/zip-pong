@@ -13,8 +13,8 @@ lineReader.eachLine(inputFile, function (line) {
         var zipCode = arr[2].replace('\r', ''); // crappy windows formated files for jerks
         
         zipObj[zipCode] = {
-            lat : parseFloat(arr[0]),
-            lon : parseFloat(arr[1])
+            lat : parseFloat(arr[1]),
+            lon : parseFloat(arr[0])
         };
     } else { // skip the header line
         isData = true;
