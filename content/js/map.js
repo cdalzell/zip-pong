@@ -9,6 +9,9 @@ var path = d3.geo.path().projection(proj);
 
 var zipObj;
 
+var lbcZip = '90806';
+var txZip = '77044';
+
 // load the data files, then call ready()
 queue()
     .defer(d3.json, 'js/us-states.geojson')
@@ -32,14 +35,30 @@ function ready(err, states, zips) {
 }
 
 function render(states) {
-    var svg = d3.select("#map").append("svg")
-        .attr("width", width)
-        .attr("height", height);
+    var svg = d3.select('#map').append('svg')
+        .attr('width', width)
+        .attr('height', height);
     
-    svg.append("g").attr("id", "states");
+    svg.append('g').attr('id', 'states');
     
-    d3.select("#states").selectAll("path")
+    d3.select('#states').selectAll('path')
         .data(states.features)
-        .enter().append("path")
-        .attr("d", path);
+        .enter().append('path')
+        .attr('d', path);
+    
+    // start out by displaying dots for now
+    // well this is an awful mess..
+    var latLongs = [];
+    
+    latLongs.push(zipObj[lbcZip]);
+    latLongs.push(zipObj[txZip]);
+    
+    svg.append('g').attr('id', 'zipdots');
+    
+    d3.select('#zipdots').selectAll('rect')
+        .data(latLongs).enter().append('rect')
+        .attr('x', function(d) { var p = proj([d.lon, d.lat]); return p ? p[0] : null; })
+        .attr('y', function(d) { var p = proj([d.lon, d.lat]); return p ? p[1] : null; })
+        .attr('class', 'zipdot')
+        .attr('width', 1).attr('height', 1);
 }
