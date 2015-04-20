@@ -47,7 +47,6 @@ function render(states) {
         .attr('d', path);
     
     // start out by displaying dots for now
-    // well this is an awful mess..
     var latLongs = [];
     
     latLongs.push(zipObj[lbcZip]);
@@ -55,10 +54,58 @@ function render(states) {
     
     svg.append('g').attr('id', 'zipdots');
     
-    d3.select('#zipdots').selectAll('rect')
-        .data(latLongs).enter().append('rect')
-        .attr('x', function(d) { var p = proj([d.lon, d.lat]); return p ? p[0] : null; })
-        .attr('y', function(d) { var p = proj([d.lon, d.lat]); return p ? p[1] : null; })
-        .attr('class', 'zipdot')
-        .attr('width', 1).attr('height', 1);
+//    d3.select('#zipdots').selectAll('rect')
+//        .data(latLongs).enter().append('rect')
+//        .attr('x', function(d) { var p = proj([d.lon, d.lat]); return p ? p[0] : null; })
+//        .attr('y', function(d) { var p = proj([d.lon, d.lat]); return p ? p[1] : null; })
+//        .attr('class', 'zipdot')
+//        .attr('width', 1).attr('height', 1);
+    
+    // see if i can make them disappear
+//    setTimeout(function () {
+//        d3.select('#zipdots').remove();
+//    }, 5000);
+    
+    var route = [{
+        type : "LineString",
+        coordinates : [
+            [ latLongs[0].lon, latLongs[0].lat ],
+            [ latLongs[1].lon, latLongs[1].lat ]
+        ]
+    }];
+    
+    var pathArcs = svg.append('g').selectAll('.arc').data(route);
+        
+    pathArcs.enter().append('path')
+        .attr({ 'class': 'arc' })
+        .style({ fill: 'none', });
+    
+    pathArcs.attr({ d : path })
+        //.attr({'class' : '.route'})
+        .style({
+            stroke : 'lightgray',
+            'stroke-width': '2px'
+        })
+        .call(lineTransition); 
+    
+    pathArcs.exit().remove();
 }
+
+var lineTransition = function lineTransition(path) {
+    path.transition()
+        .duration(777)
+        .attrTween('stroke-dasharray', tweenDash)
+        .each('end', function(d, i) {
+            // call back on line completion
+            console.log('line is done!!');
+        });
+};
+
+var tweenDash = function tweenDash() {
+    var len = this.getTotalLength();
+    var interpolate = d3.interpolateString("0," + len, len + "," + len);
+
+    return function(t) {
+        return interpolate(t);
+    };
+};
