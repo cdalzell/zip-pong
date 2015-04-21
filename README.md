@@ -11,4 +11,6 @@ How to run locally:
 
 Then just point your browser at localhost:8080
 
-Or you can see whatever the last thing I pushed to GitHub pages is by shoving this up your browser: [https://cdalzell.github.io/zip-pong/]..
+Or you can see whatever the last thing I pushed to GitHub pages is by shoving this up your browser: https://cdalzell.github.io/zip-pong/
+
+<sub>pew pew</sub>
