@@ -1,9 +1,0 @@
-{
-    "name" : "zip-pong",
-    "version" : "0.0.1",
-    "dependencies" : {
-        "connect" : "x",
-        "line-reader" : "x",
-        "serve-static" : "x"
-    }
-}
