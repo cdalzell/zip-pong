@@ -8,10 +8,8 @@ var proj = d3.geo.albersUsa()
 var path = d3.geo.path().projection(proj);
 
 var zipObj;
-
-var imsZip = '46222';
-var lbcZip = '90806';
-var txZip = '77044';
+var keyArray;
+var totalZipCodes;
 
 // load the data files, then call ready()
 queue()
@@ -31,6 +29,8 @@ function loadZips(path, callback) {
 
 function ready(err, states, zips) {
     zipObj = zips;
+    keyArray = Object.keys(zipObj);
+    totalZipCodes = keyArray.length;
     
     render(states);
 }
@@ -48,28 +48,32 @@ function render(states) {
     d3.select('#states').selectAll('path')
         .data(states.features)
         .enter().append('path')
-        .attr('d', path);
+        .attr('d', path);           
     
-    // start out by displaying dots for now
-    var latLongs = [];
+    createRandomLines(); // executes immediatly
     
-    latLongs.push(zipObj[lbcZip]);
-    latLongs.push(zipObj[txZip]);
-    
-    svg.append('g').attr('id', 'zipdots');
-    
-//    d3.select('#zipdots').selectAll('rect')
-//        .data(latLongs).enter().append('rect')
-//        .attr('x', function(d) { var p = proj([d.lon, d.lat]); return p ? p[0] : null; })
-//        .attr('y', function(d) { var p = proj([d.lon, d.lat]); return p ? p[1] : null; })
-//        .attr('class', 'zipdot')
-//        .attr('width', 1).attr('height', 1);
-    
-    drawLine(zipObj[lbcZip], zipObj[txZip]);
-    
+    // then again every 5 secs
+    var intervalHndlr = setInterval(createRandomLines, 5000);
+}
+
+function createRandomLines() {
+    var totalTime = 0;
+        
+    for (var i = 0; i < 5; i++) {
+        var keyA = keyArray[Math.floor(Math.random() * totalZipCodes)];
+        var keyB = keyArray[Math.floor(Math.random() * totalZipCodes)];            
+
+        spawnLine(keyA, keyB, totalTime);
+
+        totalTime += parseInt(Math.random() * 2000);
+    }
+}
+
+function spawnLine(keyA, keyB, totalTime) {
     setTimeout(function () {
-        drawLine(zipObj[lbcZip], zipObj[imsZip]);
-    }, 500);
+        //console.log('Drawing ' + keyA + ' -> ' + keyB + ' at ' + totalTime);
+        drawLine(zipObj[keyA], zipObj[keyB]);
+    }, totalTime);
 }
 
 function drawLine(a, b) {
@@ -102,10 +106,7 @@ var lineTransition = function lineTransition(path) {
     path.transition()
         .duration(777)
         .attrTween('stroke-dasharray', tweenDash)
-        .each('end', function(d, i) {
-            // call back on line completion
-            console.log('line is done!!');
-        
+        .each('end', function(d, i) { // call back on line completion
             setTimeout(function () {
                 path.transition()
                     .duration(1000)
