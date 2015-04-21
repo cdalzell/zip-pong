@@ -73,7 +73,7 @@ function render(states) {
             [ latLongs[1].lon, latLongs[1].lat ]
         ]
     }];
-    
+        
     var pathArcs = svg.append('g').selectAll('.arc').data(route);
         
     pathArcs.enter().append('path')
@@ -98,6 +98,13 @@ var lineTransition = function lineTransition(path) {
         .each('end', function(d, i) {
             // call back on line completion
             console.log('line is done!!');
+        
+            setTimeout(function () {
+                path.transition()
+                    .duration(1000)
+                    .style('opacity', 0)
+                    .remove();
+            }, 500);
         });
 };
 
