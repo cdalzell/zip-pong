@@ -9,6 +9,7 @@ var path = d3.geo.path().projection(proj);
 
 var zipObj;
 
+var imsZip = '46222';
 var lbcZip = '90806';
 var txZip = '77044';
 
@@ -65,6 +66,10 @@ function render(states) {
 //        .attr('width', 1).attr('height', 1);
     
     drawLine(zipObj[lbcZip], zipObj[txZip]);
+    
+    setTimeout(function () {
+        drawLine(zipObj[lbcZip], zipObj[imsZip]);
+    }, 500);
 }
 
 function drawLine(a, b) {
