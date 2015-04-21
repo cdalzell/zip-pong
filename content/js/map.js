@@ -34,8 +34,11 @@ function ready(err, states, zips) {
     render(states);
 }
 
+// global scope is where the cool kids hang out, right?
+var svg;
+
 function render(states) {
-    var svg = d3.select('#map').append('svg')
+    svg = d3.select('#map').append('svg')
         .attr('width', width)
         .attr('height', height);
     
@@ -61,19 +64,18 @@ function render(states) {
 //        .attr('class', 'zipdot')
 //        .attr('width', 1).attr('height', 1);
     
-    // see if i can make them disappear
-//    setTimeout(function () {
-//        d3.select('#zipdots').remove();
-//    }, 5000);
-    
+    drawLine(zipObj[lbcZip], zipObj[txZip]);
+}
+
+function drawLine(a, b) {
     var route = [{
         type : "LineString",
         coordinates : [
-            [ latLongs[0].lon, latLongs[0].lat ],
-            [ latLongs[1].lon, latLongs[1].lat ]
+            [ a.lon, a.lat ],
+            [ b.lon, b.lat ]
         ]
     }];
-        
+    
     var pathArcs = svg.append('g').selectAll('.arc').data(route);
         
     pathArcs.enter().append('path')
