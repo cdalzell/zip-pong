@@ -91,11 +91,19 @@ function drawLine(a, b) {
         .attr({ 'class': 'arc' })
         .style({ fill: 'none', });
     
+    var width = Math.random() * 3;
+    
+    if (width < 0.25) {
+        width = 0.25;
+    }
+    
+    var widthStr = width + 'px';
+    
     pathArcs.attr({ d : path })
         //.attr({'class' : '.route'})
         .style({
             stroke : 'lightgray',
-            'stroke-width': '2px'
+            'stroke-width': widthStr
         })
         .call(lineTransition); 
     
